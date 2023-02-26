@@ -58,9 +58,14 @@ def index(request):
         response.status_code = 404
         response.content = b'Not found.'
     else:
-        ip_str = client_ip
-        if not is_routable:
-            ip_str += ' (private)'
-        response.content = ip_str.encode('utf-8')
-        
+        data = {'ip': client_ip}
+
+        for key, value in request.META.items():
+            if key.startswith('HTTP_'):
+                header = key[5:].replace('_', '-').title()
+                data[header] = value
+
+        import json
+        response.content = json.dumps(data)
+
     return response
