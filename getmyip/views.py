@@ -46,6 +46,12 @@ def index(request):
     response = HttpResponse('', content_type='text/plain')
     response['Access-Control-Allow-Origin'] = access_allow_origin
 
+    # add headers to response
+    for key, value in request.META.items():
+        if key.startswith('HTTP_'):
+            header = key[5:].replace('_', '-').title()
+            response[header] = value
+
     # get IP address
     client_ip, is_routable = get_client_ip(request)
     if client_ip is None:
