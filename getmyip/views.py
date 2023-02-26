@@ -21,6 +21,7 @@ def index(request):
         'HTTP_VIA',
         'REMOTE_ADDR',
     ]
+    arr = []
     for i in headers:
         x_forwarded_for = request.META.get(i)
         ip = x_forwarded_for
@@ -30,4 +31,6 @@ def index(request):
             response.content = b'Not found.'
         else:
             response.content = ip.encode('utf-8')
-            return response
+            arr.append(response)
+    return arr
+            
