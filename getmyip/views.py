@@ -27,13 +27,13 @@ def index(request):
         ip = x_forwarded_for
 
         if ip:
-            ip_list.append(ip)
+            ip_list.append((i, ip))
 
     if not ip_list:
         response.status_code = 404
         response.content = b'Not found.'
     else:
-        response.content = '\n'.join(ip_list).encode('utf-8')
-        
+        response.content = b'\n'.join([f"{i[0]}: {i[1]}".encode('utf-8') for i in ip_list])
+
     return response
             
